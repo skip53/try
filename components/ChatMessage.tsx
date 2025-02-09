@@ -1,6 +1,7 @@
 import { marked } from 'marked';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
+import DOMPurify from 'dompurify';
 
 // 添加类型声明
 declare module 'marked' {
@@ -28,6 +29,10 @@ export default function ChatMessage({ role, content }: ChatMessageProps) {
       return hljs.highlightAuto(code).value;
     }
   });
+
+  // 先使用 marked 转换 markdown，然后用 DOMPurify 净化 HTML
+  const parsedHtml = marked(content);
+  const sanitizedHtml = DOMPurify.sanitize(parsedHtml);
 
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
@@ -65,7 +70,7 @@ export default function ChatMessage({ role, content }: ChatMessageProps) {
               prose-strong:font-semibold
               prose-strong:text-gray-700"
             dangerouslySetInnerHTML={{ 
-              __html: marked(content, { sanitize: true }) 
+              __html: sanitizedHtml
             }}
           />
         )}

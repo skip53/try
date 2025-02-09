@@ -17,20 +17,23 @@ export default function Home() {
   const handleSendMessage = async (message: string) => {
     if (!message.trim()) return;
 
+    // 添加用户消息
     setMessages(prev => [...prev, { role: 'user', content: message }]);
     setIsLoading(true);
 
     try {
+      // 创建一个新的消息占位
+      const assistantMessageId = messages.length + 1;
       setMessages(prev => [...prev, {
         role: 'assistant',
         content: ''
       }]);
 
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL!, {
+      const response = await fetch('https://api.siliconflow.cn/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`
+          'Authorization': 'Bearer sk-wvpscjgakjnzmbglichqklpmssaqfxkfmzzxzshazyylnnqx'
         },
         body: JSON.stringify({
           model: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-32B',
@@ -116,14 +119,11 @@ export default function Home() {
             <h1 className="text-6xl font-bold mb-8 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-transparent bg-clip-text animate-gradient">
               一滤了然问答系统
             </h1>
-            <div className="space-y-6 mb-12">
-              <p className="text-xl text-gray-600 leading-relaxed pl-4 border-l-4 border-blue-500 bg-gradient-to-r from-blue-50 to-transparent py-2">
-                基于公司 23 年案例沉淀，为您提供准确、可信的解决方案。
-              </p>
-              <p className="text-xl text-gray-600 leading-relaxed pl-4 border-l-4 border-purple-500 bg-gradient-to-r from-purple-50 to-transparent py-2">
-                无论技术疑难还是行业知识，都能帮您一滤了然。
-              </p>
-            </div>
+            <p className="text-xl text-gray-600 leading-relaxed mb-12">
+              基于公司 23 年案例沉淀，为您提供准确、可信的解决方案。
+              <br />
+              无论技术疑难还是行业知识，都能帮您一滤了然。
+            </p>
             <div className="flex gap-4">
               <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-gray-600">
                 <span className="w-2 h-2 bg-green-500 rounded-full"></span>
