@@ -23,7 +23,7 @@ export default function Home() {
 
     try {
       // 创建一个新的消息占位
-      const assistantMessageId = messages.length + 1;
+      const _assistantMessageId = messages.length + 1;
       setMessages(prev => [...prev, {
         role: 'assistant',
         content: ''
